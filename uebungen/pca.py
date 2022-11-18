@@ -5,7 +5,18 @@ def calc(df, r):
     normalized = x / df.std()
     X = normalized.to_numpy()
     U,D,Vt = np.linalg.svd(X, full_matrices=False)
-    pc = Vt.T[:, :r]
+    pc = Vt.T[:, :r].T
+    a = U@np.diag(D)[:, :r]
+    std = D / np.sqrt(len(X) - 1)
+    return X, U, D, Vt, pc, a, std
+
+
+def calc2(data, r):
+    x = data - np.mean(data)
+    normalized = x / np.std(data)
+    X = normalized
+    U,D,Vt = np.linalg.svd(X, full_matrices=False)
+    pc = Vt.T[:, :r].T
     a = U@np.diag(D)[:, :r]
     std = D / np.sqrt(len(X) - 1)
     return X, U, D, Vt, pc, a, std
